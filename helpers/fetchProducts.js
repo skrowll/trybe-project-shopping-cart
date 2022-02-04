@@ -4,7 +4,7 @@ const fetchProducts = async ($QUERY) => {
   try {
     if (!$QUERY) {
       throw new Error('ERRO');
-    } {
+    } else {
       const response = await fetch(END_POINT);
       const { results } = await response.json();
       return results;

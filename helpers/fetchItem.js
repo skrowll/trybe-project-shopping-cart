@@ -1,12 +1,12 @@
-const fetchItem = async (id) => {
+const fetchItem = async ($ItemID) => {
   // seu código aqui
-  const END_POINT = `https://api.mercadolibre.com/sites/MLB/search?q=${id}`;
+  const END_POINT = `https://api.mercadolibre.com/items/${$ItemID}`;
   try {
-    if (!id) {
+    if (!$ItemID) {
       throw new Error('ERRO');
-    } {
+    } else {
       const response = await fetch(END_POINT);
-      const result = response.json();
+      const result = await response.json();
       return result;
     }
   } catch (error) {
