@@ -12,11 +12,12 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// ============================================================================================== //
+function cartItemClickListener(event) {
+  const shopCart = event.target.parentElement;
+  shopCart.removeChild(event.target);
+}
 
-// function cartItemClickListener(event) {
-  // coloque seu código aqui
-// }
+// ============================================================================================== //
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
