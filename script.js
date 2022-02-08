@@ -12,9 +12,29 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function attLocalStorageList() {
+  localStorage.clear('cartItems');
+  const ol = document.querySelector('ol');
+  saveCartItems(ol.innerHTML);
+}
+
 function cartItemClickListener(event) {
   const shopCart = event.target.parentElement;
   shopCart.removeChild(event.target);
+  attLocalStorageList();
+}
+
+function loadSavedCart() {
+  const savedProductList = getSavedCartItems();
+  const ol = document.querySelector('ol');
+  ol.innerHTML = savedProductList;
+  const productList = document.querySelectorAll('.cart__item');
+  productList.forEach((element) => {
+    element.addEventListener('click', (event) => {
+      event.target.parentElement.removeChild(event.target);
+      attLocalStorageList();
+    });
+  });
 }
 
 // ============================================================================================== //
@@ -32,6 +52,9 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 const addProductToCart = async (sku) => {
   const product = await fetchItem(sku);
   createCartItemElement(product);
+  const ol = document.querySelector('ol');
+  saveCartItems(ol.innerHTML);
+  // console.log(ol.innerHTML);
 };
 
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
@@ -45,7 +68,7 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   section.appendChild(button);
   button.addEventListener('click', async () => addProductToCart(sku));
-  
+
   return section;
 }
 
@@ -55,7 +78,8 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 
 const createFetchProducts = async () => {
   const showProducts = document.querySelector('.items');
-  showProducts.innerText = 'carregando...';
+  // showProducts.innerText = 'carregando...';
+  // showProducts.className = 'loading';
   const productsArray = await fetchProducts('computador');
   showProducts.innerText = null;
   productsArray.forEach((product) => {
@@ -64,6 +88,7 @@ const createFetchProducts = async () => {
   });
 };
 
-window.onload = async () => { 
+window.onload = async () => {
   await createFetchProducts();
+  loadSavedCart();
 };
