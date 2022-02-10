@@ -71,6 +71,17 @@ buttonClear.addEventListener('click', () => {
   attCartList();
 });
 
+const loadingScreen = (param) => {
+  if (param === 'add') {
+    const itemsSection = document.querySelector('.items');
+    itemsSection.appendChild(createCustomElement('p', 'loading', 'carregando...'));
+  }
+  if (param === 'remove') {
+    const itemsSection = document.querySelector('.items');
+    itemsSection.removeChild(itemsSection.childNodes[0]);
+  }
+};
+
 // ============================================================================================== //
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -89,13 +100,14 @@ const addProductToCart = async (sku) => {
   attCartList();
 };
 
-function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image, price }) {
   const section = document.createElement('section');
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__price', `R$${price.toFixed(2)}`));
   // section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
   const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   section.appendChild(button);
@@ -109,11 +121,10 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 // }
 
 const createFetchProducts = async () => {
+  loadingScreen('add');
   const showProducts = document.querySelector('.items');
-  // showProducts.innerText = 'carregando...';
-  // showProducts.className = 'loading';
   const productsArray = await fetchProducts('computador');
-  showProducts.innerText = null;
+  loadingScreen('remove');
   productsArray.forEach((product) => {
     const productCard = createProductItemElement(product);
     showProducts.appendChild(productCard);
