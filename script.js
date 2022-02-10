@@ -13,7 +13,6 @@ function createProductImageElement(imageSource) {
 
 const displayTotalPrice = (totalPrice) => {
   // p.innerText = `Subtotal: R$${totalPrice.toFixed(2)}`; // https://www.delftstack.com/pt/howto/javascript/javascript-round-to-2-decimal-places/
-  // p.innerText = `${Math.round(totalPrice)}`;
   p.innerText = `${totalPrice}`;
 };
 
@@ -63,6 +62,14 @@ function loadSavedCart() {
   attCartList();
   // sumPrices();
 }
+
+const buttonClear = document.querySelector('.empty-cart');
+buttonClear.addEventListener('click', () => {
+  const ol = document.querySelector('ol');
+  ol.innerHTML = '';
+  localStorage.removeItem('cartItems');
+  attCartList();
+});
 
 // ============================================================================================== //
 
