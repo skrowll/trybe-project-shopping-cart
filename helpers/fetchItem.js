@@ -10,7 +10,7 @@ const fetchItem = async ($ItemID) => {
       return result;
     }
   } catch (error) {
-    return error;
+    return new Error('You must provide an url');
   }
 };
 
