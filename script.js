@@ -1,9 +1,33 @@
+const cart = document.querySelector('.cart');
+const clearButton = document.querySelector('.empty-cart');
+const p = document.createElement('p');
+p.className = 'total-price';
+cart.insertBefore(p, clearButton); // https://stackoverflow.com/questions/5882768/how-to-append-a-childnode-to-a-specific-position
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
   return img;
 }
+
+const displayTotalPrice = (totalPrice) => {
+  // p.innerText = `Subtotal: R$${totalPrice.toFixed(2)}`; // https://www.delftstack.com/pt/howto/javascript/javascript-round-to-2-decimal-places/
+  // p.innerText = `${Math.round(totalPrice)}`;
+  p.innerText = `${totalPrice}`;
+};
+
+const sumPrices = () => {
+  let totalPrice = 0;
+  const productList = document.querySelectorAll('.cart__item');
+  productList.forEach((element) => {
+    const position = (element.innerText).indexOf('$');
+    const price = parseFloat((element.innerText).substring(position + 1));
+    totalPrice += price;
+  });
+  displayTotalPrice(totalPrice);
+  return totalPrice;
+};
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -12,16 +36,17 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function attLocalStorageList() {
+function attCartList() {
   localStorage.clear('cartItems');
   const ol = document.querySelector('ol');
   saveCartItems(ol.innerHTML);
+  sumPrices();
 }
 
 function cartItemClickListener(event) {
   const shopCart = event.target.parentElement;
   shopCart.removeChild(event.target);
-  attLocalStorageList();
+  attCartList();
 }
 
 function loadSavedCart() {
@@ -31,10 +56,12 @@ function loadSavedCart() {
   const productList = document.querySelectorAll('.cart__item');
   productList.forEach((element) => {
     element.addEventListener('click', (event) => {
-      event.target.parentElement.removeChild(event.target);
-      attLocalStorageList();
+      cartItemClickListener(event);
+      // attCartList();
     });
   });
+  attCartList();
+  // sumPrices();
 }
 
 // ============================================================================================== //
@@ -52,9 +79,7 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 const addProductToCart = async (sku) => {
   const product = await fetchItem(sku);
   createCartItemElement(product);
-  const ol = document.querySelector('ol');
-  saveCartItems(ol.innerHTML);
-  // console.log(ol.innerHTML);
+  attCartList();
 };
 
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
@@ -78,8 +103,8 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 
 const createFetchProducts = async () => {
   const showProducts = document.querySelector('.items');
-  showProducts.innerText = 'carregando...';
-  showProducts.className = 'loading';
+  // showProducts.innerText = 'carregando...';
+  // showProducts.className = 'loading';
   const productsArray = await fetchProducts('computador');
   showProducts.innerText = null;
   productsArray.forEach((product) => {
