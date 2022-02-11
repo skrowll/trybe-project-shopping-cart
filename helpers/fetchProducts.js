@@ -2,14 +2,10 @@ const fetchProducts = async ($QUERY) => {
   // seu código aqui
   const END_POINT = `https://api.mercadolibre.com/sites/MLB/search?q=${$QUERY}`;
   try {
-    if (!$QUERY) {
-      throw new Error('You must provide an url');
-    } else {
-      const response = await fetch(END_POINT);
+    const response = await fetch(END_POINT);
       const { results } = await response.json();
       return results;
-    }
-  } catch (error) {
+    } catch (error) {
     return new Error('You must provide an url');
   }
 };
