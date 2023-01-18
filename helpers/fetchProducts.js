@@ -1,5 +1,4 @@
 const fetchProducts = async ($QUERY) => {
-  // seu código aqui
   const END_POINT = `https://api.mercadolibre.com/sites/MLB/search?q=${$QUERY}`;
   try {
     const response = await fetch(END_POINT);

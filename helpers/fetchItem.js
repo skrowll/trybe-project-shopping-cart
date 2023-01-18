@@ -1,5 +1,4 @@
 const fetchItem = async ($ItemID) => {
-  // seu código aqui
   const END_POINT = `https://api.mercadolibre.com/items/${$ItemID}`;
   try {
     const response = await fetch(END_POINT);
