@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Free Mart</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,19 +19,33 @@
   <body>
     <header class="header">
       <div class="container-title">
-        <span class="title"><strong>skrowll</strong>shopping</span>
+        <span class="title"><strong>Free</strong>mart</span>
       </div>
-      <i class="material-icons" style="font-size:45px;color:white">shopping_cart</i>
+      <div class="container-search">
+        <input
+          spellcheck="false"
+          type="text"
+          class="search-input"
+          id="search"
+          placeholder="Procurar categoria"
+        />
+        <button class="search-button">
+          <i class="material-icons" style="font-size:30px;color:#999">search</i>
+        </button>
+      </div>
       <div class="container-cartTitle">
+        <i class="material-icons" style="font-size:45px;position:absolute;right: 103%;color:#253d8a">shopping_cart</i>
         <span class="cart__title">Meu carrinho</span>
       </div>
     </header>
-    <section class="container">
-      <section class="items"></section>
-      <section class="cart">
+    <div style="display: flex;">
+      <section class="container">
+        <section class="items"></section>
+      </section>
+      <aside class="cart">
         <ol class="cart__items"></ol>
         <button class="empty-cart">Esvaziar carrinho</button>
-      </section>
-    </section>
+      </aside>
+    </div>
   </body>
 </html>
