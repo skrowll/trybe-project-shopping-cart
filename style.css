@@ -1,39 +1,72 @@
 * {
-  box-sizing: border-box;
-  font-family: Epilogue, sans-serif;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Epilogue, sans-serif;
 }
 
 body {
-  background-color: rgb(246, 246, 246);
+  background-color: #f5f5f5;
 }
 
 .header {
-  position: relative;
-  background-color: rgb(3, 52, 45);
+  position: fixed;
+  z-index: 2;
+  background-color: #fff159;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 60px;
 }
 
-.container-title {
-  width: 80%;
-}
-
 .title {
-  color: rgb(221, 221, 221);
+  color: #253d8a;
   font-size: 30px;
   padding-left: 30px;
+}
+
+.container-search {
+  position: relative;
+}
+
+.container-search input {
+  flex: 1 1 auto;
+  height: 40px;
+  width: 25vw;
+  padding-left: 16px;
+  padding-right: 60px;
+  font-size: 16px;
+  border: 1px solid #f2f2f2;
+  border-radius: 22px;
+  background: #fff;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 400;
+  outline: none;
+}
+
+.container-search button {
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  translate: 0 -50%;
+  width: 60px;
+  height: 40px;
+  border-radius: 0;
+  border-top-right-radius: 22px;
+  border-bottom-right-radius: 20px;
+  background: #f2f2f2;
+  border-color: transparent;
 }
 
 .container-cartTitle {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: rgb(10, 118, 79);
-  width: 40%;
+  background-color: #253d8a;
+  width: 30%;
+  min-width: 300px;
   height: 100%;
   margin-left: 30px;
 }
@@ -49,7 +82,7 @@ body {
   right: 61.5%;
   width: 39.5%;
   height: 15px;
-  background: rgb(10, 118, 79);
+  background: #253d8a;
   transform: skew(-45deg);
   z-index: 0;
 }
@@ -61,34 +94,35 @@ body {
   right: 61.5%;
   width: 39.5%;
   height: 15px;
-  background: rgb(10, 118, 79);
+  background: #253d8a;
   transform: skew(45deg);
   z-index: 0;
 }
 
 .container-cartTitle .cart__title {
-  color: white;
+  color: #fff159;
   font-size: 20px;
-  padding-left: 35px;
+  padding-left: 30px;
   font-weight: 700;
 }
 
 .container {
   display: flex;
   justify-content: space-around;
-  width: 100%;
+  width: 70%;
 }
 
 .title strong {
-  color: white;
+  color: #253d8a;
 }
 
 .items {
   display: flex;
-  flex-basis: 70%;
+  width: auto;
   flex-wrap: wrap;
   justify-content: center;
   margin: 40px 0;
+  padding-top: 40px;
 }
 
 .item {
@@ -97,9 +131,14 @@ body {
   height: auto;
   margin: 5px;
   width: 200px;
-  border: 2px solid rgb(234, 234, 233);
+  border: 2px solid #e5e5e5;
   border-radius: 5px;
   box-sizing: border-box;
+  background-color: #fff;
+}
+
+.item:hover {
+  transform: scale(1.02);
 }
 
 .item .item__sku {
@@ -115,29 +154,80 @@ body {
 }
 
 .item .item__image {
+  max-width: 100%;
+  max-height: 50%;
+  width: auto;
+  height: auto;
+}
+
+.item .item__price {
+  padding: 10px;
+  text-align: right;
+  font-weight: 700;
   width: 100%;
 }
 
 .item .item__add {
-  background-color: rgb(5, 52, 219);
+  background-color: #253d8a;
   border: 0;
   cursor: pointer;
   margin: 0;
   padding: 10px;
-  color: white;
+  color: #ffffff;
+  font-weight: 1000;
 }
 
 .cart {
+  position: sticky;
+  top: 0;
+  right: 0;
   display: flex;
-  flex-basis: 32%;
+  width: 30%;
+  min-width: 300px;
+  height: 100vh;
   flex-flow: column wrap;
   background-color: rgb(241, 241, 238);
-  height: 100vh;
+  padding-top: 60px;
 }
 
 .cart .cart__items {
-  height: 500px;
+  height: 80vh;
   overflow-y: scroll;
+}
+
+.cart .total-price {
+  font-size: x-large;
+  font-weight: 700;
+  text-align: center;
+  margin: 20px;
+  color: #253d8a;
+}
+
+.cart .cart__item {
+  display: flex;
+  cursor: pointer;
+  margin: 15px 0;
+}
+
+.cart .cart__item:hover {
+  filter: grayscale(1);
+  opacity: 70%;
+}
+
+.cart
+.cart__item
+.details_container{
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cart
+.cart__item
+.details_container
+.cart_item_price {
+  font-weight: 700;
 }
 
 .empty-cart {
@@ -145,5 +235,14 @@ body {
   height: 35px;
   margin: 0 auto;
   border: 2px solid rgb(5, 52, 219);
+  border-radius: 10px;
   background-color: rgb(249, 249, 246);
+  font-weight: 1000;
+  cursor: pointer;
+}
+
+.empty-cart:hover {
+  transform: scale(1.1);
+  background-color: #253d8a;
+  color: #fff;
 }
