@@ -1,8 +1,11 @@
 const cart = document.querySelector('.cart');
 const clearButton = document.querySelector('.empty-cart');
+const searchButton = document.querySelector('.search-button');
+const searchInput = document.querySelector('input');
 const p = document.createElement('p');
 p.className = 'total-price';
-cart.insertBefore(p, clearButton); // https://stackoverflow.com/questions/5882768/how-to-append-a-childnode-to-a-specific-position
+cart.insertBefore(p, clearButton);
+let query = '';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -12,8 +15,7 @@ function createProductImageElement(imageSource) {
 }
 
 const displayTotalPrice = (totalPrice) => {
-  // p.innerText = `Subtotal: R$${totalPrice.toFixed(2)}`; // https://www.delftstack.com/pt/howto/javascript/javascript-round-to-2-decimal-places/
-  p.innerText = `${totalPrice}`;
+  p.innerText = `Subtotal: R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
 };
 
 const sumPrices = () => {
@@ -21,7 +23,7 @@ const sumPrices = () => {
   const productList = document.querySelectorAll('.cart__item');
   productList.forEach((element) => {
     const position = (element.innerText).indexOf('$');
-    const price = parseFloat((element.innerText).substring(position + 1));
+    const price = parseFloat((element.innerText.replaceAll(',', '.')).substring(position + 1));
     totalPrice += price;
   });
   displayTotalPrice(totalPrice);
@@ -43,8 +45,12 @@ function attCartList() {
 }
 
 function cartItemClickListener(event) {
-  const shopCart = event.target.parentElement;
-  shopCart.removeChild(event.target);
+  const shopCart = document.querySelector('.cart__items');
+  if (event.target.className === 'details_container') {
+    shopCart.removeChild(event.target.parentElement);
+  } else {
+    shopCart.removeChild(event.target.parentElement.parentElement);
+  }
   attCartList();
 }
 
@@ -56,15 +62,12 @@ function loadSavedCart() {
   productList.forEach((element) => {
     element.addEventListener('click', (event) => {
       cartItemClickListener(event);
-      // attCartList();
     });
   });
   attCartList();
-  // sumPrices();
 }
 
-const buttonClear = document.querySelector('.empty-cart');
-buttonClear.addEventListener('click', () => {
+clearButton.addEventListener('click', () => {
   const ol = document.querySelector('ol');
   ol.innerHTML = '';
   localStorage.removeItem('cartItems');
@@ -82,12 +85,18 @@ const loadingScreen = (param) => {
   }
 };
 
-// ============================================================================================== //
-
-function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+function createCartItemElement({ title: name, price: salePrice, thumbnail: image }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerHTML = (`
+    <div class='cart_item_img_container'>
+      <img class='cart_item_img' src=${image}/>
+    </div>
+    <div class='details_container'>
+      <span class='cart_item_name'>${name}</span>
+      <span class='cart_item_price'>R$ ${salePrice.toFixed(2).replace('.', ',')}</span>
+    </div>
+  `);
   li.addEventListener('click', cartItemClickListener);
   const itemCart = document.querySelector('.cart__items');
   itemCart.appendChild(li);
@@ -106,9 +115,10 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image, pric
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('span', 'item__price', `R$${price.toFixed(2)}`));
-  // section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(createProductImageElement(image.replace('-I', '-O')));
+  section.appendChild(createCustomElement(
+    'span', 'item__price', `R$ ${price.toFixed(2).replace('.', ',')}`,
+  ));
   const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   section.appendChild(button);
   button.addEventListener('click', async () => addProductToCart(sku));
@@ -116,22 +126,30 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image, pric
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
 const createFetchProducts = async () => {
   loadingScreen('add');
-  const showProducts = document.querySelector('.items');
-  const productsArray = await fetchProducts('computador');
+  const itemsContainer = document.querySelector('.items');
+  const productsArray = await fetchProducts(query);
   loadingScreen('remove');
+  itemsContainer.innerHTML = '';
   productsArray.forEach((product) => {
     const productCard = createProductItemElement(product);
-    showProducts.appendChild(productCard);
+    itemsContainer.appendChild(productCard);
   });
 };
 
-window.onload = async () => {
+searchButton.addEventListener('click', async () => {
   await createFetchProducts();
+});
+
+searchInput.addEventListener('keypress', (event) => {
+  query = event.target.value;
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    searchButton.click();
+  }
+});
+
+window.onload = () => {
   loadSavedCart();
 };
