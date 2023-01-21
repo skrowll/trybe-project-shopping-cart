@@ -184,14 +184,14 @@ body {
   display: flex;
   width: 30%;
   min-width: 300px;
-  height: 100vh;
+  height: 100rem;
   flex-flow: column wrap;
   background-color: rgb(241, 241, 238);
   padding-top: 60px;
 }
 
 .cart .cart__items {
-  height: 80vh;
+  height: 75vh;
   overflow-y: scroll;
 }
 
